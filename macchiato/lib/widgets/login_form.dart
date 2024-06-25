@@ -44,7 +44,7 @@ class LoginForm extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CustomButton(
-              text: "Signin",
+              text: "Sign in",
               onPressed: () => model.signIn(context),
             ),
           ],
