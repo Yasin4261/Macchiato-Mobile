@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:macchiato/viewmodels/notification_viewmodel.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:qr_flutter/qr_flutter.dart';
+import '../viewmodels/notification_viewmodel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -24,15 +26,67 @@ class _HomeScreenState extends State<HomeScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     // Server'dan gelen bildirim sayısı örneği
-    int newNotifications = 10;
+    int newNotifications = 105;
 
     // Modeli güncelle
     Provider.of<NotificationViewModel>(context, listen: false)
         .setNotificationCount(newNotifications);
   }
 
+  // QR kodunu tam ekran göstermek için dialog
+  void _showFullScreenQr(String data) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop(); // Dialog dışına tıklanınca kapat
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pop(); // Çarpı butonuna basınca kapat
+                            },
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: QrImageView(
+                          data: data,
+                          version: QrVersions.auto,
+                          size: MediaQuery.of(context).size.width * 0.9,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Kullanıcıya özel QR kod verisi
+    String userId = 'user123'; // Örnek kullanıcı ID'si
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
@@ -75,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
               accountName: Text('Kullanıcı Adı'),
               accountEmail: Text('kullanici@example.com'),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/profile_photo.png'),
+                backgroundImage: AssetImage(
+                    'assets/profile/profile_photo.png'), // Doğru dosya yolu
               ),
               decoration: BoxDecoration(
                 color: Colors.blue,
@@ -108,8 +163,37 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: const Center(
-        child: Text('Welcome to the Home Screen!'),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () => _showFullScreenQr(userId),
+                  child: QrImageView(
+                    data: userId,
+                    version: QrVersions.auto,
+                    size: 200.0,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                const Text(
+                  'Bu, kullanıcıya özel QR kodudur.',
+                  style: TextStyle(fontSize: 16),
+                ),
+                // Diğer içerikler buraya eklenebilir
+                const SizedBox(height: 800), // Uzun bir içerik için örnek
+                const Text(
+                  'Sayfa kaydırılabilir.',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
