@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     // Server'dan gelen bildirim sayısı örneği
-    int newNotifications = 105;
+    int newNotifications = 10;
 
     // Modeli güncelle
     Provider.of<NotificationViewModel>(context, listen: false)
