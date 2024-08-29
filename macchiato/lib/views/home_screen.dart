@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.of(context).pop(); // Dialog dışına tıklanınca kapat
             },
             child: Container(
+              color: Colors.white,
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -172,17 +173,60 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () => _showFullScreenQr(userId),
-                  child: QrImageView(
-                    data: userId,
-                    version: QrVersions.auto,
-                    size: 200.0,
+                  child: Container(
+                    color: Colors.white,
+                    child: QrImageView(
+                      data: userId,
+                      version: QrVersions.auto,
+                      size: 200.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                const Text(
-                  'Bu, kullanıcıya özel QR kodudur.',
-                  style: TextStyle(fontSize: 16),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 24,
+                            color: Colors.green,
+                          ),
+                          Icon(
+                            Icons.circle,
+                            size: 24,
+                          ),
+                          Icon(
+                            Icons.circle,
+                            size: 24,
+                          ),
+                          Icon(
+                            Icons.circle,
+                            size: 24,
+                          ),
+                          Icon(
+                            Icons.circle,
+                            size: 24,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.favorite,
+                            size: 24,
+                            color: Colors.red,
+                          ),
+                          Text('Hediye Kahve : 5',
+                              style: TextStyle(fontSize: 16)),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
                 // Diğer içerikler buraya eklenebilir
                 const SizedBox(height: 800), // Uzun bir içerik için örnek
